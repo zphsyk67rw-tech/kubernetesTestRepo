@@ -1,0 +1,102 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: github-dind-runner
+  namespace: default
+  labels:
+    app: github-dind-runner
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: github-dind-runner
+  template:
+    metadata:
+      labels:
+        app: github-dind-runner
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: kubenode1
+        kubernetes.io/arch: arm64
+
+      restartPolicy: Always
+
+      containers:
+        - name: github-runner
+          image: summerwind/actions-runner-dind:latest
+          securityContext:
+            privileged: true
+
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+
+          env:
+            - name: DOCKER_TLS_CERTDIR
+              value: "/certs"
+
+            # GitHub Runner Einstellungen
+            - name: GITHUB_URL
+              value: "https://github.com"
+
+            - name: RUNNER_REPO
+              value: "zphsyk67rw-tech/main"
+
+            # Runner Registration Token
+            - name: RUNNER_TOKEN
+              valueFrom:
+                configMapKeyRef:
+                  name: github-runner-config
+                  key: runner_token
+
+            - name: RUNNER_NAME
+              value: "k8s-arm64-runner"
+
+            - name: RUNNER_LABELS
+              value: "waa-test,self-hosted,arm64"
+
+            - name: RUNNER_WORKDIR
+              value: "/tmp/runner"
+
+          ports:
+            - containerPort: 2376
+
+          volumeMounts:
+            - name: docker-graph
+              mountPath: /var/lib/docker
+
+            - name: docker-certs
+              mountPath: /certs
+
+            - name: runner-workdir
+              mountPath: /runner
+
+            - name: hostdir
+              mountPath: /host-data
+
+      volumes:
+        - name: docker-graph
+          emptyDir: {}
+
+        - name: docker-certs
+          emptyDir: {}
+
+        - name: runner-workdir
+          emptyDir: {}
+
+        - name: hostdir
+          hostPath:
+            path: /mnt
+            type: Directory
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: github-runner-config
+  namespace: default
+data:
+  runner_token: "B4GHW25JYZRWWG4HS2UHPDTKAC6HY"

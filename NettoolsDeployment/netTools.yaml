@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nettoolsprod
+  namespace: prod
+spec:
+  replicas: 3
+
+  selector:
+    matchLabels:
+      app: nettoolsprod
+
+  template:
+    metadata:
+      labels:
+        app: nettoolsprod
+
+    spec:
+
+      tolerations:
+        - key: "node.kubernetes.io/unreachable"
+          operator: "Exists"
+          effect: "NoSchedule"
+
+        - key: "node.kubernetes.io/unreachable"
+          operator: "Exists"
+          effect: "NoExecute"
+
+      containers:
+        - name: nettools
+          image: nicolaka/netshoot
+
+          command:
+            - sleep
+            - infinity
+
+          stdin: true
+          tty: true
+
+
+
