@@ -1,0 +1,35 @@
+name: Sync Configs to MasterNode
+
+on:
+  push:
+    branches:
+      - new-start-pluralsight
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: [self-hosted]
+    
+    steps:
+      - name: Checkout sync branch
+        uses: actions/checkout@v5
+        with:
+          ref: new-start-pluralsight
+      
+      - name: Sync files to local MasterNodeDir
+        run: |
+          rsync -avz \
+            --exclude='.git' \
+            --exclude='.github' \
+            --exclude='*.md' \
+            ./ /opt/configs/
+            
+  timestamp:
+      runs-on: [self-hosted]
+      needs: sync
+    
+      steps:
+      - name: Write timestamp to remote file
+        run: |
+           date >> /opt/configs/synced.txt
+        
