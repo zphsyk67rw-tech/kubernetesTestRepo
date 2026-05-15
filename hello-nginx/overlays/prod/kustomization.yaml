@@ -8,7 +8,7 @@ resources:
 
 replicas:
   - name: hello-nginx
-    count: 2
+    count: 4
 
 labels:
   - pairs:
