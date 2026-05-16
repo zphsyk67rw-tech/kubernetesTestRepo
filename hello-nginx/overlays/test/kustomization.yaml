@@ -6,6 +6,10 @@ namespace: test
 resources:
   - ../../base
 
+replicas:
+  - name: hello-nginx
+    count: 3
+
 labels:
   - pairs:
       environment: test
