@@ -17,3 +17,10 @@ spec:
           image: nginx:stable-alpine
           ports:
             - containerPort: 80
+          volumeMounts:
+            - name: webcontent
+              mountPath: /usr/share/nginx/html/web-app
+      volumes:
+        - name: webcontent
+          persistentVolumeClaim:
+            claimName: nfs-pvc
