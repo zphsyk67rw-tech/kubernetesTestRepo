@@ -4,6 +4,4 @@ kind: Kustomization
 resources:
   - deployment.yaml
   - service.yaml
-  - nfs-pv.yaml
-  - nfs-pvc.yaml
 

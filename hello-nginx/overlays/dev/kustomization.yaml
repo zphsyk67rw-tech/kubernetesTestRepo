@@ -5,6 +5,8 @@ namespace: dev
 
 resources:
   - ../../base
+  - nfs-pv.yaml
+  - nfs-pvc.yaml
 
 replicas:
   - name: hello-nginx
