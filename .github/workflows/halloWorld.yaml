@@ -5,7 +5,7 @@ on:
 
 jobs:
   hello:
-    runs-on: waa-test
+    runs-on: [self-hosted]
     steps:
       - name: Say Hello
         run: echo "Hello World Nochmal zu Dir"
