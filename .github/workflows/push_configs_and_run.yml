@@ -14,7 +14,7 @@ jobs:
       - name: Checkout sync branch
         uses: actions/checkout@v5
         with:
-          ref: new-start-pluralsight
+          ref: main
       
       - name: Sync files to local MasterNodeDir
         run: |
