@@ -3,7 +3,7 @@ name: Sync Configs to MasterNode
 on:
   push:
     branches:
-      - new-start-pluralsight
+      - main
   workflow_dispatch:
 
 jobs:
