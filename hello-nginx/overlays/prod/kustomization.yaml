@@ -10,7 +10,7 @@ resources:
 
 replicas:
   - name: hello-nginx
-    count: 6
+    count: 4
 
 labels:
   - pairs:
